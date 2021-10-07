@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DATA = [
     {
@@ -15,32 +16,37 @@ const DATA = [
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d72',
       todo: 'Third Item',
-      complete: 'NO'
+      complete: 'DONE'
     },
   ];
 
 
-const Todo = ({ todo }) => {
-    return (
-        <View>
-            <Text>{todo.todo}</Text>
-        </View>
-    );
-}
-
 const TodoViewer = (props) => {
+
+    const handleTodoPress = (todo) => {
+        console.log('todo.id: ', todo.id);
+    }
     
     const Todos = DATA.map(todo=> {
+        
+        let iconName = todo.complete==='DONE' ? 'checkmark-circle' : 'checkmark-circle-outline';
+        let iconColor = todo.complete==='DONE' ? '#4630EB' : '#C0C0C0';
         return (
-            <View key={todo.id}>
-                <Text>{todo.todo}</Text>
-            </View>
+            <TouchableOpacity key={todo.id} onPress={()=>handleTodoPress(todo)}>
+                <View style={styles.todoList}>
+                    <Text style={styles.todoStyle}>{todo.todo}</Text>
+                    <Ionicons name={iconName}
+                        size={25}
+                        color={iconColor}
+                  />
+                </View>
+            </TouchableOpacity>
         );
     })
     
     return (
         <ScrollView 
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={styles.todoWrapper}
             keyboardShouldPersistTaps='handled'
         >
             {Todos}      
@@ -49,8 +55,24 @@ const TodoViewer = (props) => {
 }
 
 const styles = StyleSheet.create({
-      
-
+    todoList: {
+        borderColor: 'black',
+        marginVertical: 2,
+        paddingVertical: 15,
+        paddingHorizontal: 15,
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    todoStyle: {
+        fontSize: 21,
+    },
+    todoWrapper: { 
+        flexGrow: 1, 
+        paddingTop: 20, 
+        marginHorizontal: 10, 
+    }
 });
 
 export default TodoViewer;
